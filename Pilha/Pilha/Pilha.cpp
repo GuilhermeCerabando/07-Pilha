@@ -5,16 +5,16 @@ using namespace std;
 struct NO {
 	int valor;
 	NO* prox;
-	NO* aux = NULL;
 };
 
-NO* topo = NULL;
+NO* inicio = NULL;
+NO* fim = NULL;
 
 // headers
 void menu();
 void inicializar();
-void pop();
-void push();
+void insere();
+void remove();
 //--------------------------
 
 
@@ -28,13 +28,12 @@ void menu()
 	int op = 0;
 	while (op != 4) {
 		system("cls"); // somente no windows
-		cout << "Menu Pilha";
+		cout << "Menu Fila";
 		cout << endl << endl;
-		cout << "1 - Inicializar Pilha \n";
-		cout << "2 - Inserir elemento (Push) \n";
-		cout << "3 - Remover elementos (Pop) \n";
+		cout << "1 - Inicializar Fila \n";
+		cout << "2 - Inserir elemento \n";
+		cout << "3 - Remover elemento  \n";
 		cout << "4 - Sair \n";
-
 
 		cout << "Opcao: ";
 		cin >> op;
@@ -43,9 +42,9 @@ void menu()
 		{
 		case 1: inicializar();
 			break;
-		case 2:push();
+		case 2:insere();
 			break;
-		case 3: pop();
+		case 3: remove();
 			break;
 		case 4:
 			return;
@@ -60,45 +59,68 @@ void menu()
 void inicializar()
 {
 
-	// se a lista j� possuir elementos
+	// se a lista j  possuir elementos
 	// libera a memoria ocupada
-	NO* aux = topo;
+	NO* aux = inicio;
 	while (aux != NULL) {
 		NO* paraExcluir = aux;
 		aux = aux->prox;
 		free(paraExcluir);
 	}
 
-	topo = NULL;
-	cout << "Pilha inicializada \n";
+	inicio = NULL;
+	fim = NULL;
+	cout << "Fila inicializada \n";
 
 }
 
 
-void push()
+void insere()
 {
-    NO* novo = (NO*)malloc(sizeof(NO));
-    if (novo == NULL)
+	// aloca memoria dinamicamente para o novo elemento
+	NO* novo = (NO*)malloc(sizeof(NO));
+	if (novo == NULL)
+	{
+		return;
+	}
+
+	cout << "digite o elemento: ";
+	cin >> novo->valor;
+	novo->prox = NULL;
+
+	if (inicio == NULL) 
     {
-        return;
+        inicio = novo;
+        fim = novo;
+    }
+    else 
+    {
+        fim->prox = novo;
+        fim = novo;
     }
 
-    cout << "Digite o elemento: ";
-    cin >> novo->valor;
-    novo->prox = topo; 
-    topo = novo; 
+    cout << "elemento inserido" << endl;
 }
+	
 
-void pop()
+
+
+
+void remove()
 {
-    if (topo == NULL) 
+if (inicio == NULL) 
     {
-        cout << "Pilha Vazia\n";
+        cout << "fila Vazia" << endl;
         return;
     }
 
-    cout << "Elemento removido: " << topo->valor << endl;
-    NO* paraExcluir = topo;
-    topo = topo->prox; 
-    free(paraExcluir); 
+    NO* aux = inicio;
+    cout << "elemento removido: " << aux->valor << endl;
+    inicio = inicio->prox;
+    free(aux);
+
+    if (inicio == NULL) 
+    {
+        fim = NULL;
+    }
 }
